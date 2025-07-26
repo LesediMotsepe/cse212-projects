@@ -4,6 +4,8 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 // DO NOT MODIFY THE CODE IN THE TESTS in this file, just the comments above the tests. 
 // Fix the code being tested to match requirements and make all tests pass. 
 
+
+
 [TestClass]
 public class TakingTurnsQueueTests
 {
@@ -169,4 +171,62 @@ public class TakingTurnsQueueTests
             );
         }
     }
+
+
+public class TakingTurnsQueue
+{
+    private Queue<QueueItem> queue = new Queue<QueueItem>();
+
+    private class QueueItem
+    {
+        public Person Person { get; }
+        public int RemainingTurns { get; private set; }
+
+        public bool IsInfinite => Person.Turns <= 0;
+
+        public QueueItem(string name, int turns)
+        {
+            Person = new Person(name, turns);
+            RemainingTurns = turns;
+        }
+
+        public void Decrement()
+        {
+            if (!IsInfinite)
+            {
+                RemainingTurns--;
+            }
+        }
+
+        public bool HasTurnsLeft => IsInfinite || RemainingTurns > 0;
+    }
+
+    public int Length => queue.Count;
+
+    public void AddPerson(string name, int turns)
+    {
+        queue.Enqueue(new QueueItem(name, turns));
+    }
+
+    public Person GetNextPerson()
+    {
+        if (queue.Count == 0)
+        {
+            throw new InvalidOperationException("No one in the queue.");
+        }
+
+        var item = queue.Dequeue();
+        var personToReturn = item.Person;
+
+        item.Decrement();
+
+        if (item.HasTurnsLeft)
+        {
+            queue.Enqueue(item);
+        }
+
+        return personToReturn;
+    }
+}
+
 }
