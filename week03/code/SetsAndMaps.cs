@@ -19,10 +19,27 @@ public static class SetsAndMaps
     /// that there were no duplicates) and therefore should not be returned.
     /// </summary>
     /// <param name="words">An array of 2-character words (lowercase, no duplicates)</param>
+
+
     public static string[] FindPairs(string[] words)
     {
-        // TODO Problem 1 - ADD YOUR CODE HERE
-        return [];
+        var wordSet = new HashSet<string>();
+    var pairs = new HashSet<string>();
+
+    foreach (var word in words)
+    {
+        var reverseWord = new string(word.Reverse().ToArray());
+        if (wordSet.Contains(reverseWord) && word[0] != word[1])
+        {
+            var pair = string.Compare(word, reverseWord) < 0 ? $"{word} & {reverseWord}" : $"{reverseWord} & {word}";
+            pairs.Add(pair);
+        }
+        wordSet.Add(word);
+    }
+
+    return pairs.ToArray();
+
+   
     }
 
     /// <summary>
@@ -42,11 +59,25 @@ public static class SetsAndMaps
         foreach (var line in File.ReadLines(filename))
         {
             var fields = line.Split(",");
-            // TODO Problem 2 - ADD YOUR CODE HERE
+            
+        var degree = fields[3].Trim();
+
+        if (degrees.TryGetValue(degree, out var count))
+        {
+            degrees[degree] = count + 1;
+        }
+        else
+        {
+            degrees[degree] = 1;
+        }
+    }
+
+    return degrees;
+
         }
 
-        return degrees;
-    }
+     
+   
 
     /// <summary>
     /// Determine if 'word1' and 'word2' are anagrams.  An anagram
