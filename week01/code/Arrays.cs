@@ -40,10 +40,15 @@ public static class Arrays
     /// Rotate the 'data' to the right by the 'amount'.  For example, if the data is 
     /// List<int>{1, 2, 3, 4, 5, 6, 7, 8, 9} and an amount is 3 then the list after the function runs should be 
     /// List<int>{7, 8, 9, 1, 2, 3, 4, 5, 6}.  The value of amount will be in the range of 1 to data.Count, inclusive.
-
+    /// Rotates a list of integers to the right by a specified amount.
+    /// For example:
+    /// Input: {1, 2, 3, 4, 5, 6, 7, 8, 9}, amount = 5
+    /// Output: {5, 6, 7, 8, 9, 1, 2, 3, 4}
 
     /// Because a list is dynamic, this function will modify the existing data list rather than returning a new list.
     /// </summary>
+    /// <param name="data">The list of integers to rotate</param>
+    /// <param name="amount">The number of positions to rotate to the right</param>
     public static void RotateListRight(List<int> data, int amount)
     {
         //1. Calculate effective rotation amount: Calculate the effective rotation amount by taking the modulus of the amount with the count of the list. This is to handle cases where the amount is greater than the count of the list.
@@ -57,6 +62,11 @@ public static class Arrays
 
         // Calculate effective rotation amount
         int effectiveAmount = amount % data.Count;
+
+         List<int> lastElements = data.GetRange(
+            data.Count - effectiveAmount,
+            effectiveAmount
+        );
 
         // Get the last 'effectiveAmount' elements
         var lastElements = data.GetRange(data.Count - effectiveAmount, effectiveAmount);
